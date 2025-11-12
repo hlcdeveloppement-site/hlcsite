@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="fr" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HLC Développement</title>
+  <meta name="description" content="HLC Développement — Valorisation immobilière, structuration d'actifs et exécution haut de gamme." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#0a0a0a;--muted:#666;--line:#e5e7eb;--bg:#fff;--accent:#dde7f2;--light:#f5f7fa;--brand:#0e2a47}
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+    img{display:block}
+    a{color:inherit}
+    .container{max-width:1120px;margin:0 auto;padding:0 16px}
+    h1,h2,h3{font-family:"Playfair Display",serif;letter-spacing:-.2px}
+    h1{font-size:48px;margin:0 0 16px}
+    h2{font-size:32px;margin:0 0 4px}
+    h3{font-size:20px;margin:0 0 6px}
+    p{margin:0 0 12px;line-height:1.6}
+    .subtle{color:var(--muted);margin:4px 0 0}
+    .rule{height:1px;background:var(--line);margin:24px 0}
+    .chip{display:inline-block;font-size:12px;border:1px solid #d4d4d8;background:var(--accent);border-radius:999px;padding:6px 10px}
+    .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid #d4d4d8;
+         background:var(--ink);color:#fff;border-radius:10px;padding:10px 14px;font-size:14px;cursor:pointer;text-decoration:none}
+    .btn.alt{background:#fff;color:var(--ink)}
+    .btn.light{background:transparent;border-color:rgba(255,255,255,.7);color:#fff}
+    .grid{display:grid;gap:20px}
+    @media(min-width:640px){.grid.cols-2{grid-template-columns:repeat(2,1fr)}}
+    @media(min-width:1024px){.grid.cols-3{grid-template-columns:repeat(3,1fr)}}
+    @media(min-width:960px){.split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;align-items:center}}
+
+    /* Header */
+    header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.95);backdrop-filter:saturate(180%) blur(8px);
+      border-bottom:1px solid var(--line)}
+    header .nav a{padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--ink);font-weight:500}
+    header .nav a:hover{background:var(--accent)}
+    header .nav{display:flex;gap:8px;align-items:center}
+    .lang button{border:1px solid #d4d4d8;padding:8px 12px;background:#fff;cursor:pointer;border-radius:8px;font-weight:500}
+    .lang button.active{background:var(--accent);font-weight:600}
+
+    /* Hero */
+    .hero{position:relative;height:min(72vh,640px);overflow:hidden;color:#fff}
+    .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s}
+    .hero img.active{opacity:1}
+    .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,12,24,.55) 0%,rgba(8,18,36,.85) 100%);z-index:1}
+    .hero .inner{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 16px}
+    .hero .content{max-width:620px}
+    .hero p{color:rgba(255,255,255,.82)}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+    .stats{display:grid;gap:18px;margin-top:36px}
+    @media(min-width:640px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    .stat{padding:18px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2)}
+    .stat h3{font-size:28px;color:#fff;margin:0 0 6px}
+    .stat p{margin:0;color:rgba(255,255,255,.7)}
+    .dots{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;display:flex;gap:8px;z-index:3}
+    .dot{width:10px;height:10px;border-radius:999px;border:1px solid rgba(255,255,255,.45);background:rgba(255,255,255,.2);cursor:pointer}
+    .dot.active{background:var(--accent)}
+
+    section{padding:72px 0}
+    section.alt{background:var(--light)}
+    .section-header{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
+    .section-header .kicker{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);font-weight:600}
+    .under{position:relative;display:inline-block}
+    .under:after{content:"";position:absolute;left:0;bottom:-6px;width:56px;height:3px;background:var(--accent)}
+
+    .about-text{font-size:16px;color:#35363a;line-height:1.7}
+    .pill-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .pill{padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:#fff;font-size:13px;font-weight:500;color:#1f2937}
+
+    .card{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 8px 30px rgba(15,23,42,.06);cursor:pointer;display:flex;flex-direction:column;transition:transform .2s ease,box-shadow .2s ease}
+    .card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(15,23,42,.12)}
+    .thumb{aspect-ratio:16/10;background:#f4f4f5;overflow:hidden}
+    .thumb img{width:100%;height:100%;object-fit:cover}
+    .card .body{padding:18px;display:flex;flex-direction:column;gap:10px;flex:1}
+    .card h3{margin:0;font-size:18px}
+    .card p{margin:0;color:#52525b;font-size:14px;line-height:1.6}
+    .card .meta{display:flex;flex-wrap:wrap;gap:10px;color:#4b5563;font-size:13px}
+    .card .meta span{display:flex;align-items:center;gap:6px}
+    .card .meta svg{width:14px;height:14px;stroke-width:1.6}
+    .card .btn{align-self:flex-start;margin-top:auto}
+
+    .ceo{display:grid;gap:24px;align-items:center}
+    @media(min-width:900px){.ceo{grid-template-columns:320px 1fr}}
+    .ceo figure{border-radius:18px;overflow:hidden;box-shadow:0 20px 60px rgba(15,23,42,.18);margin:0}
+    .ceo figcaption{padding:18px;background:#0f172a;color:#fff}
+
+    footer{background:#fafafa;border-top:1px solid var(--line);padding:32px 0;color:#52525b;font-size:14px}
+    footer .legal{display:flex;flex-wrap:wrap;gap:18px;margin-top:10px}
+    footer a{text-decoration:none;color:inherit}
+
+    /* Modal */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;z-index:60}
+    .modal.open{display:flex}
+    .modal .panel{background:#fff;border-radius:18px;max-width:900px;width:100%;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+    .modal .media{height:320px;position:relative;background:#000}
+    .modal .media img{width:100%;height:100%;object-fit:cover}
+    .modal .close{position:absolute;top:10px;right:12px;font-size:28px;color:#fff;background:transparent;border:none;cursor:pointer}
+    .modal .content{padding:26px}
+    .modal .content h3{margin:0 0 10px}
+    .modal .list{display:grid;gap:12px;margin:18px 0 0;font-size:14px;color:#475569}
+    .modal .list div{display:flex;justify-content:space-between;gap:18px;align-items:center}
+    .modal .list strong{color:var(--brand);font-weight:600}
+
+    .contact-card{border:1px solid var(--line);border-radius:18px;padding:24px;background:#fff;display:grid;gap:12px}
+    .contact-card a{color:var(--brand);font-weight:600;text-decoration:none}
+    .contact-grid{display:grid;gap:20px}
+    @media(min-width:720px){.contact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+    .badge-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;color:#1f2937;font-size:13px}
+
+    @media(max-width:680px){header .nav{display:none}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:110px;height:28px;background:#111;border-radius:6px"></div>
+        <nav class="nav" id="nav">
+          <a href="#hero" data-i="nav.home">Accueil</a>
+          <a href="#about" data-i="nav.about">À propos</a>
+          <a href="#track" data-i="nav.track">Track Record</a>
+          <a href="#pipeline" data-i="nav.pipeline">Pipeline</a>
+          <a href="#contact" data-i="nav.contact">Contact</a>
+        </nav>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <a href="#ceo" class="btn alt" data-i="nav.ceo">CEO</a>
+        <div class="lang">
+          <button id="b-fr" aria-pressed="true" class="active">FR</button>
+          <button id="b-en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="hero" class="hero">
+    <img src="https://images.unsplash.com/photo-1529429612776-7f7a7d65bfc5?q=80&w=2000&auto=format&fit=crop" class="active" alt="Nice architecture view">
+    <img src="https://images.unsplash.com/photo-1487956382158-bb926046304a?q=80&w=2000&auto=format&fit=crop" alt="Mediterranean villa">
+    <img src="https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?q=80&w=2000&auto=format&fit=crop" alt="Côte d’Azur real estate">
+    <div class="inner">
+      <div class="container">
+        <div class="content">
+          <p class="kicker" data-i="hero.kicker">Valorisation d'actifs premium</p>
+          <h1 data-i="hero.title">Accélérer la création de valeur immobilière</h1>
+          <p data-i="hero.lead">De l'identification des opportunités à l'exécution opérationnelle, HLC Développement accompagne promoteurs, investisseurs et familles dans leurs stratégies immobilières haut de gamme.</p>
+          <div class="hero-actions">
+            <a href="#about" class="btn" data-i="hero.primaryCta">Découvrir notre savoir-faire</a>
+            <a href="#contact" class="btn light" data-i="hero.secondaryCta">Nous contacter</a>
+          </div>
+          <div class="stats" id="hero-stats"></div>
+        </div>
+      </div>
+    </div>
+    <div class="dots"><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div>
+  </section>
+
+  <section id="about">
+    <div class="container split">
+      <div>
+        <div class="section-header">
+          <span class="kicker" data-i="about.kicker">Notre approche</span>
+          <h2 class="under" data-i="about.title">Structurer, sécuriser, valoriser.</h2>
+        </div>
+        <p class="about-text" data-i="about.body1">Depuis la Riviera française, HLC Développement orchestre des opérations immobilières premium : acquisitions, montages juridiques et financiers, repositionnements d'actifs et pilotage d'opérations complexes.</p>
+        <p class="about-text" data-i="about.body2">Nous mobilisons un réseau d'experts (architectes, AMO, fiscalistes, offices notariaux) pour délivrer un accompagnement sur-mesure et créer de la valeur durable pour chaque projet.</p>
+        <div class="pill-list" id="about-pill"></div>
+      </div>
+      <div class="contact-card" style="box-shadow:0 20px 60px rgba(15,23,42,.08)" id="about-metrics"></div>
+    </div>
+  </section>
+
+  <section id="track" class="alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="kicker" data-i="track.kicker">Track record</span>
+        <h2 class="under" data-i="track.title">Opérations livrées et valorisées</h2>
+        <p class="subtle" data-i="track.subtitle">Sélection de projets pilotés par HLC Développement auprès d'investisseurs privés et institutionnels.</p>
+      </div>
+      <div class="grid cols-3" id="projects"></div>
+    </div>
+  </section>
+
+  <section id="pipeline">
+    <div class="container">
+      <div class="section-header">
+        <span class="kicker" data-i="pipeline.kicker">Pipeline</span>
+        <h2 class="under" data-i="pipeline.title">Opérations en cours</h2>
+        <p class="subtle" data-i="pipeline.subtitle">Mandats de développement, restructurations d'actifs et opérations hors marché en structuration.</p>
+      </div>
+      <div class="grid cols-3" id="pipeline-grid"></div>
+    </div>
+  </section>
+
+  <section id="ceo" class="alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="kicker" data-i="ceo.kicker">Direction</span>
+        <h2 class="under" data-i="ceo.title">La vision d'Hervé Colombo</h2>
+      </div>
+      <div class="ceo">
+        <figure>
+          <img src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=1200&auto=format&fit=crop" alt="Portrait professionnel">
+          <figcaption>
+            <strong data-i="ceo.name">Hervé Colombo</strong><br>
+            <span data-i="ceo.role">Fondateur &amp; CEO</span>
+          </figcaption>
+        </figure>
+        <div>
+          <p data-i="ceo.body1">Après plus de quinze ans au service de groupes hôteliers et de foncières internationales, Hervé Colombo fonde HLC Développement pour mettre son expertise de structuration au service d'investisseurs exigeants.</p>
+          <p data-i="ceo.body2">Son approche privilégie la rigueur financière, la discrétion et la création de valeur à long terme, avec une attention particulière portée à la qualité d'exécution et à l'expérience client final.</p>
+          <div class="badge-list" id="ceo-pill"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <div class="section-header">
+        <span class="kicker" data-i="contact.kicker">Contact</span>
+        <h2 class="under" data-i="contact.title">Discutons de vos projets</h2>
+        <p class="subtle" data-i="contact.subtitle">Basés à Nice et opérant en France, en Italie et en Suisse, nous intervenons sur des mandats sur-mesure pour les investisseurs privés et institutionnels.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-card" id="contact-coord"></div>
+        <div class="contact-card" id="contact-form-card">
+          <h3 data-i="contact.formTitle">Partager un dossier</h3>
+          <p data-i="contact.formBody">Présentez-nous brièvement votre besoin, votre périmètre d'investissement ou l'actif à repositionner. Nous revenons vers vous sous 48h.</p>
+          <form class="grid" style="gap:12px">
+            <label>
+              <span data-i="contact.formName">Nom complet</span><br>
+              <input type="text" placeholder="John Doe" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line)" required>
+            </label>
+            <label>
+              <span data-i="contact.formEmail">E-mail professionnel</span><br>
+              <input type="email" placeholder="contact@exemple.com" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line)" required>
+            </label>
+            <label>
+              <span data-i="contact.formMessage">Message</span><br>
+              <textarea rows="4" placeholder="Décrivez votre projet" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);resize:vertical" required></textarea>
+            </label>
+            <button type="submit" class="btn" data-i="contact.formSubmit">Envoyer</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:92px;height:24px;background:#111;border-radius:6px"></div>
+        <strong>HLC Développement</strong>
+      </div>
+      <div data-i="footer.body">Structuration d'opérations immobilières prime et accompagnement stratégique 360°.</div>
+      <div class="legal">
+        <span data-i="footer.legal">© HLC Développement. Tous droits réservés.</span>
+        <a href="mailto:contact@hlcdeveloppement.fr">contact@hlcdeveloppement.fr</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="panel">
+      <div class="media">
+        <img src="" alt="" id="modal-img">
+        <button class="close" aria-label="Fermer" id="modal-close">×</button>
+      </div>
+      <div class="content">
+        <span class="chip" id="modal-tag"></span>
+        <h3 id="modal-title"></h3>
+        <p id="modal-desc"></p>
+        <div class="list" id="modal-list"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* --- JavaScript amélioré --- */
+
+// JS active => bascule la classe sur <html>
+document.documentElement.classList.remove('no-js');
+document.documentElement.classList.add('js');
+
+const cardsEl = document.getElementById('projects');
+const pipelineEl = document.getElementById('pipeline-grid');
+const heroStatsEl = document.getElementById('hero-stats');
+const aboutMetricsEl = document.getElementById('about-metrics');
+const aboutPillEl = document.getElementById('about-pill');
+const ceoPillEl = document.getElementById('ceo-pill');
+const contactCoordEl = document.getElementById('contact-coord');
+
+const modal = document.getElementById('modal');
+const modalImg = document.getElementById('modal-img');
+const modalTitle = document.getElementById('modal-title');
+const modalDesc = document.getElementById('modal-desc');
+const modalTag = document.getElementById('modal-tag');
+const modalList = document.getElementById('modal-list');
+const closeBtn = document.getElementById('modal-close');
+
+const i18n = {
+  fr: {
+    nav: {home: 'Accueil', about: 'À propos', track: 'Track Record', pipeline: 'Pipeline', contact: 'Contact', ceo: 'CEO'},
+    hero: {
+      kicker: "Valorisation d'actifs premium",
+      title: "Accélérer la création de valeur immobilière",
+      lead: "De l'identification des opportunités à l'exécution opérationnelle, HLC Développement accompagne promoteurs, investisseurs et familles dans leurs stratégies immobilières haut de gamme.",
+      primaryCta: "Découvrir notre savoir-faire",
+      secondaryCta: "Nous contacter",
+      stats: [
+        {value: '2,3 Md€', label: 'Valeur cumulée des actifs conseillés'},
+        {value: '+25', label: 'Opérations pilotées en Europe'},
+        {value: '3 pays', label: 'France · Italie · Suisse'}
+      ]
+    },
+    about: {
+      kicker: 'Notre approche',
+      title: 'Structurer, sécuriser, valoriser.',
+      body1: "Depuis la Riviera française, HLC Développement orchestre des opérations immobilières premium : acquisitions, montages juridiques et financiers, repositionnements d'actifs et pilotage d'opérations complexes.",
+      body2: "Nous mobilisons un réseau d'experts (architectes, AMO, fiscalistes, offices notariaux) pour délivrer un accompagnement sur-mesure et créer de la valeur durable pour chaque projet.",
+      tags: ['Valorisation patrimoniale', 'Structuration de club deals', 'Accompagnement family office', 'Hospitality & Résidentiel prime', 'Repositionnement d’actifs', 'Asset management opérationnel'],
+      metrics: [
+        {title: 'Due diligence & sourcing', text: 'Identification d’opérations off-market et négociation des conditions d’acquisition.'},
+        {title: 'Structuration & financement', text: 'Montage juridique et financier sur-mesure, sécurisation des partenaires et investisseurs.'},
+        {title: 'Pilotage opérationnel', text: 'Coordination complète des intervenants, suivi budgétaire et stratégie de sortie.'}
+      ]
+    },
+    track: {
+      kicker: 'Track record',
+      title: 'Opérations livrées et valorisées',
+      subtitle: 'Sélection de projets pilotés par HLC Développement auprès d\'investisseurs privés et institutionnels.'
+    },
+    pipeline: {
+      kicker: 'Pipeline',
+      title: 'Opérations en cours',
+      subtitle: 'Mandats de développement, restructurations d\'actifs et opérations hors marché en structuration.'
+    },
+    ceo: {
+      kicker: 'Direction',
+      title: "La vision d'Hervé Colombo",
+      name: 'Hervé Colombo',
+      role: 'Fondateur & CEO',
+      body1: "Après plus de quinze ans au service de groupes hôteliers et de foncières internationales, Hervé Colombo fonde HLC Développement pour mettre son expertise de structuration au service d'investisseurs exigeants.",
+      body2: "Son approche privilégie la rigueur financière, la discrétion et la création de valeur à long terme, avec une attention particulière portée à la qualité d'exécution et à l'expérience client final.",
+      badges: ['Ex-Directeur Développement hôtelier', 'Expert en montages complexes', 'Réseau européen d\'investisseurs', 'Culture résultat & confidentialité']
+    },
+    contact: {
+      kicker: 'Contact',
+      title: 'Discutons de vos projets',
+      subtitle: 'Basés à Nice et opérant en France, en Italie et en Suisse, nous intervenons sur des mandats sur-mesure pour les investisseurs privés et institutionnels.',
+      coord: {
+        title: 'Coordonnées',
+        items: [
+          {label: 'Téléphone', value: '+33 (0)6 12 34 56 78', href: 'tel:+33612345678'},
+          {label: 'E-mail', value: 'contact@hlcdeveloppement.fr', href: 'mailto:contact@hlcdeveloppement.fr'},
+          {label: 'Adresse', value: 'Nice, Côte d\'Azur - Rendez-vous confidentiels'}
+        ]
+      },
+      formTitle: 'Partager un dossier',
+      formBody: 'Présentez-nous brièvement votre besoin, votre périmètre d\'investissement ou l\'actif à repositionner. Nous revenons vers vous sous 48h.',
+      formName: 'Nom complet',
+      formEmail: 'E-mail professionnel',
+      formMessage: 'Message',
+      formSubmit: 'Envoyer'
+    },
+    footer: {
+      body: 'Structuration d\'opérations immobilières prime et accompagnement stratégique 360°.',
+      legal: '© HLC Développement. Tous droits réservés.'
+    },
+    projects: [
+      {
+        title: 'Palais Méditerranée',
+        blurb: 'Transformation d\'un palace historique en résidences de prestige avec services hôteliers.',
+        img: 'https://images.unsplash.com/photo-1505849864904-01c3173c79ab?q=80&w=1600&auto=format&fit=crop',
+        location: 'Nice, France',
+        size: '8 500 m²',
+        value: '120 M€',
+        tag: 'Réalisé',
+        description: 'Mission complète : sourcing, structuration juridique, levée de financements, pilotage travaux et commercialisation en VEFA.'
+      },
+      {
+        title: 'Villa Azzura',
+        blurb: 'Développement d\'un ensemble de villas contemporaines face mer, services conciergerie.',
+        img: 'https://images.unsplash.com/photo-1560448075-bb485b067938?q=80&w=1600&auto=format&fit=crop',
+        location: 'Sanremo, Italie',
+        size: '12 lots',
+        value: '45 M€',
+        tag: 'Livré',
+        description: 'Structuration d\'un club deal et mise en place d\'un opérateur hôtelier pour mutualiser services et maintenance.'
+      },
+      {
+        title: 'Montreux Waterfront',
+        blurb: 'Repositionnement d\'un actif hôtelier en résidences premium avec spa et restauration.',
+        img: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1600&auto=format&fit=crop',
+        location: 'Montreux, Suisse',
+        size: '5 200 m²',
+        value: '68 MCHF',
+        tag: 'Développé',
+        description: 'Accompagnement stratégique du family office propriétaire, pilotage des études et négociation des autorisations.'
+      }
+    ],
+    pipelineProjects: [
+      {
+        title: 'Signature Riviera',
+        blurb: 'Création d\'une résidence services 5★ avec 40 suites et rooftop club.',
+        img: 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?q=80&w=1600&auto=format&fit=crop',
+        location: 'Cannes, France',
+        size: '40 clés',
+        value: 'En montage',
+        tag: 'Structuration',
+        description: 'Recherche d\'opérateur, structuration foncière et montage financier en cours.'
+      },
+      {
+        title: 'Dolce Lago',
+        blurb: 'Acquisition d\'un domaine lacustre pour développement mixte hospitality & résidentiel.',
+        img: 'https://images.unsplash.com/photo-1519996409144-56c88c9aa612?q=80&w=1600&auto=format&fit=crop',
+        location: 'Lac de Côme, Italie',
+        size: '3,5 ha',
+        value: 'Due diligence',
+        tag: 'Exclusivité',
+        description: 'Négociation hors marché, études de faisabilité et stratégie de financement en cours.'
+      },
+      {
+        title: 'Alpine Retreat',
+        blurb: 'Conversion d\'un hôtel alpin en resort bien-être avec chalets privatifs.',
+        img: 'https://images.unsplash.com/photo-1600585154340-0ef3c08dcdb6?q=80&w=1600&auto=format&fit=crop',
+        location: 'Verbier, Suisse',
+        size: '6 100 m²',
+        value: 'Mandat AMO',
+        tag: 'Accompagnement',
+        description: 'Restructuration lourde, optimisation énergétique et repositionnement marketing.'
+      }
+    ],
+    modal: {
+      location: 'Localisation',
+      size: 'Surface / Capacités',
+      value: 'Valeur / Statut',
+      close: 'Fermer'
+    }
+  },
+  en: {
+    nav: {home: 'Home', about: 'About', track: 'Track Record', pipeline: 'Pipeline', contact: 'Contact', ceo: 'CEO'},
+    hero: {
+      kicker: 'Premium asset enhancement',
+      title: 'Accelerating real estate value creation',
+      lead: 'From sourcing off-market opportunities to operational execution, HLC Développement supports developers, investors and families in their high-end real estate strategies.',
+      primaryCta: 'Discover our expertise',
+      secondaryCta: 'Get in touch',
+      stats: [
+        {value: '€2.3bn', label: 'Cumulative value of advised assets'},
+        {value: '25+', label: 'Operations led across Europe'},
+        {value: '3 countries', label: 'France · Italy · Switzerland'}
+      ]
+    },
+    about: {
+      kicker: 'Our approach',
+      title: 'Structure, secure, enhance.',
+      body1: 'From the French Riviera, HLC Développement orchestrates premium real estate transactions: acquisitions, legal and financial structuring, asset repositioning and complex project management.',
+      body2: 'We activate a network of experts (architects, advisors, tax specialists, notaries) to deliver tailored support and generate sustainable value for every mandate.',
+      tags: ['Value-add strategies', 'Club deal structuring', 'Family office advisory', 'Prime hospitality & residential', 'Asset repositioning', 'Operational asset management'],
+      metrics: [
+        {title: 'Due diligence & sourcing', text: 'Identifying off-market deals and negotiating acquisition terms.'},
+        {title: 'Structuring & financing', text: 'Tailor-made legal and financial setups securing partners and investors.'},
+        {title: 'Operational leadership', text: 'Full coordination of stakeholders, cost control and exit strategy design.'}
+      ]
+    },
+    track: {
+      kicker: 'Track record',
+      title: 'Delivered & optimised operations',
+      subtitle: 'Selection of projects steered by HLC Développement for private and institutional investors.'
+    },
+    pipeline: {
+      kicker: 'Pipeline',
+      title: 'Mandates in progress',
+      subtitle: 'Development assignments, asset restructuring and off-market opportunities under structuring.'
+    },
+    ceo: {
+      kicker: 'Leadership',
+      title: "Hervé Colombo's vision",
+      name: 'Hervé Colombo',
+      role: 'Founder & CEO',
+      body1: 'After more than fifteen years leading growth for international hospitality groups and listed property companies, Hervé Colombo created HLC Développement to bring his structuring expertise to discerning investors.',
+      body2: 'His approach blends financial discipline, discretion and long-term value creation, with uncompromising attention to execution quality and the end-user experience.',
+      badges: ['Former Hospitality Development Director', 'Expert in complex deal structuring', 'Pan-European investor network', 'Results-driven & confidential']
+    },
+    contact: {
+      kicker: 'Contact',
+      title: 'Let’s discuss your projects',
+      subtitle: 'Based in Nice and active across France, Italy and Switzerland, we deliver bespoke mandates for private and institutional investors.',
+      coord: {
+        title: 'Contact details',
+        items: [
+          {label: 'Phone', value: '+33 (0)6 12 34 56 78', href: 'tel:+33612345678'},
+          {label: 'Email', value: 'contact@hlcdeveloppement.fr', href: 'mailto:contact@hlcdeveloppement.fr'},
+          {label: 'Address', value: 'Nice, French Riviera – Confidential meetings'}
+        ]
+      },
+      formTitle: 'Submit a project',
+      formBody: 'Tell us about your requirements, investment scope or asset repositioning needs. We’ll get back to you within 48 hours.',
+      formName: 'Full name',
+      formEmail: 'Business email',
+      formMessage: 'Message',
+      formSubmit: 'Send'
+    },
+    footer: {
+      body: 'Prime real estate structuring and 360° strategic advisory.',
+      legal: '© HLC Développement. All rights reserved.'
+    },
+    projects: [
+      {
+        title: 'Palais Méditerranée',
+        blurb: 'Transformation of a historic palace into serviced branded residences.',
+        img: 'https://images.unsplash.com/photo-1505849864904-01c3173c79ab?q=80&w=1600&auto=format&fit=crop',
+        location: 'Nice, France',
+        size: '8,500 sqm',
+        value: '€120M',
+        tag: 'Delivered',
+        description: 'End-to-end mandate: sourcing, legal structuring, financing, works supervision and VEFA sales strategy.'
+      },
+      {
+        title: 'Villa Azzura',
+        blurb: 'Development of contemporary seafront villas with hospitality-grade services.',
+        img: 'https://images.unsplash.com/photo-1560448075-bb485b067938?q=80&w=1600&auto=format&fit=crop',
+        location: 'Sanremo, Italy',
+        size: '12 units',
+        value: '€45M',
+        tag: 'Delivered',
+        description: 'Club-deal structuring and operator onboarding to mutualise concierge and maintenance services.'
+      },
+      {
+        title: 'Montreux Waterfront',
+        blurb: 'Repositioning of a lakeside hotel into premium residences with spa and dining.',
+        img: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1600&auto=format&fit=crop',
+        location: 'Montreux, Switzerland',
+        size: '5,200 sqm',
+        value: '68M CHF',
+        tag: 'Developed',
+        description: 'Strategic advisory for the owning family office, feasibility oversight and permitting negotiation.'
+      }
+    ],
+    pipelineProjects: [
+      {
+        title: 'Signature Riviera',
+        blurb: 'Creation of a five-star serviced residence with 40 suites and rooftop club.',
+        img: 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?q=80&w=1600&auto=format&fit=crop',
+        location: 'Cannes, France',
+        size: '40 keys',
+        value: 'Structuring',
+        tag: 'In progress',
+        description: 'Operator selection, land structuring and financial engineering underway.'
+      },
+      {
+        title: 'Dolce Lago',
+        blurb: 'Acquisition of a lakeside estate for mixed-use hospitality and residential development.',
+        img: 'https://images.unsplash.com/photo-1519996409144-56c88c9aa612?q=80&w=1600&auto=format&fit=crop',
+        location: 'Lake Como, Italy',
+        size: '3.5 ha',
+        value: 'Due diligence',
+        tag: 'Exclusive',
+        description: 'Off-market negotiation, feasibility studies and financing strategy in progress.'
+      },
+      {
+        title: 'Alpine Retreat',
+        blurb: 'Conversion of an alpine hotel into a wellness resort with private chalets.',
+        img: 'https://images.unsplash.com/photo-1600585154340-0ef3c08dcdb6?q=80&w=1600&auto=format&fit=crop',
+        location: 'Verbier, Switzerland',
+        size: '6,100 sqm',
+        value: 'AMO mandate',
+        tag: 'Advisory',
+        description: 'Heavy refurbishment, energy optimisation and repositioning of the commercial offer.'
+      }
+    ],
+    modal: {
+      location: 'Location',
+      size: 'Size / Capacity',
+      value: 'Value / Status',
+      close: 'Close'
+    }
+  }
+};
+
+let LANG = 'fr';
+function updateLangAttributes(){
+  document.documentElement.setAttribute('lang', LANG);
+  document.getElementById('b-fr').classList.toggle('active', LANG === 'fr');
+  document.getElementById('b-en').classList.toggle('active', LANG === 'en');
+  document.getElementById('b-fr').setAttribute('aria-pressed', LANG === 'fr');
+  document.getElementById('b-en').setAttribute('aria-pressed', LANG === 'en');
+}
+
+function fillPills(wrapper, values){
+  wrapper.innerHTML='';
+  values.forEach(text=>{
+    const span=document.createElement('span');
+    span.className='pill';
+    span.textContent=text;
+    wrapper.appendChild(span);
+  });
+}
+
+function fillHeroStats(stats){
+  heroStatsEl.innerHTML='';
+  stats.forEach(stat=>{
+    const div=document.createElement('div');
+    div.className='stat';
+    div.innerHTML=`<h3>${stat.value}</h3><p>${stat.label}</p>`;
+    heroStatsEl.appendChild(div);
+  });
+}
+
+function fillMetrics(metrics){
+  aboutMetricsEl.innerHTML='';
+  metrics.forEach(metric=>{
+    const block=document.createElement('div');
+    block.innerHTML=`<h3>${metric.title}</h3><p>${metric.text}</p>`;
+    aboutMetricsEl.appendChild(block);
+  });
+}
+
+function renderCards(target, list){
+  target.innerHTML='';
+  list.forEach(p=>{
+    const viewBtn = LANG==='fr' ? 'Voir le projet' : 'View project';
+    const card=document.createElement('article');
+    card.className='card';
+    card.innerHTML=`
+      <div class="thumb"><img src="${p.img}" alt="${p.title}"></div>
+      <div class="body">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+          <h3>${p.title}</h3>
+          <span class="chip">${p.tag}</span>
+        </div>
+        <p>${p.blurb}</p>
+        <div class="meta">
+          <span>${p.location}</span>
+          <span>${p.size}</span>
+          <span>${p.value}</span>
+        </div>
+        <button class="btn" type="button">${viewBtn}</button>
+      </div>`;
+    card.querySelector('.btn').onclick=()=>openModal(p);
+    card.onclick=(evt)=>{
+      if(evt.target.closest('button')) return;
+      openModal(p);
+    };
+    target.appendChild(card);
+  });
+}
+
+function renderContact(coord){
+  contactCoordEl.innerHTML=`<h3>${coord.title}</h3>`;
+  coord.items.forEach(item=>{
+    const wrap=document.createElement('div');
+    wrap.style.display='grid';
+    wrap.style.gap='4px';
+    const label=document.createElement('span');
+    label.style.fontSize='12px';
+    label.style.letterSpacing='.08em';
+    label.style.textTransform='uppercase';
+    label.style.color='var(--muted)';
+    label.textContent=item.label;
+    const value=document.createElement(item.href ? 'a' : 'span');
+    value.textContent=item.value;
+    if(item.href) value.href=item.href;
+    if(!item.href){
+      value.style.fontWeight='600';
+      value.style.color='var(--ink)';
+    }
+    contactCoordEl.appendChild(wrap);
+    wrap.appendChild(label);
+    wrap.appendChild(value);
+  });
+}
+
+function render(){
+  const t = i18n[LANG];
+  updateLangAttributes();
+
+  document.querySelectorAll('[data-i]').forEach(el=>{
+    const path = el.dataset.i.split('.');
+    let value = t;
+    path.forEach(k=>{ if(value) value = value[k]; });
+    if(typeof value === 'string'){
+      if(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA'){
+        el.placeholder = value;
+      } else {
+        el.textContent = value;
+      }
+    }
+  });
+
+  fillHeroStats(t.hero.stats);
+  fillPills(aboutPillEl, t.about.tags);
+  fillMetrics(t.about.metrics);
+  renderCards(cardsEl, t.projects);
+  renderCards(pipelineEl, t.pipelineProjects);
+  fillPills(ceoPillEl, t.ceo.badges);
+  renderContact(t.contact.coord);
+}
+
+function openModal(project){
+  const labels = i18n[LANG].modal;
+  closeBtn.setAttribute('aria-label', labels.close);
+  modalImg.src = project.img;
+  modalImg.alt = project.title;
+  modalTitle.textContent = project.title;
+  modalDesc.textContent = project.description;
+  modalTag.textContent = project.tag;
+  modalList.innerHTML = '';
+
+  const details = [
+    {label: labels.location, value: project.location},
+    {label: labels.size, value: project.size},
+    {label: labels.value, value: project.value}
+  ];
+  details.forEach(item=>{
+    const row=document.createElement('div');
+    row.innerHTML = `<strong>${item.label}</strong><span>${item.value}</span>`;
+    modalList.appendChild(row);
+  });
+
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+}
+
+function closeModal(){
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+}
+
+closeBtn.addEventListener('click', closeModal);
+modal.addEventListener('click', (event)=>{
+  if(event.target === modal){
+    closeModal();
+  }
+});
+
+document.addEventListener('keydown', (event)=>{
+  if(event.key === 'Escape' && modal.classList.contains('open')){
+    closeModal();
+  }
+});
+
+/* slider inchangé */
+(function(){
+  const hero=document.querySelector('.hero');
+  const imgs=hero.querySelectorAll('img');
+  const dots=hero.querySelectorAll('.dot');
+  let i=0;
+  const go=(k)=>{
+    imgs[i].classList.remove('active');
+    dots[i].classList.remove('active');
+    i=k;
+    imgs[i].classList.add('active');
+    dots[i].classList.add('active');
+  };
+  dots.forEach((d,idx)=>d.onclick=()=>go(idx));
+  setInterval(()=>go((i+1)%imgs.length),5000);
+})();
+
+/* Lang switch */
+document.getElementById('b-fr').onclick=()=>{LANG='fr';render();};
+document.getElementById('b-en').onclick=()=>{LANG='en';render();};
+
+render();
+</script>
+</body>
+</html>
